@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Blogs</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">Node.js Advanced Blog Website</a>
+      <ul class="navbar-items">
+        <li class="navbar-item">
+          <a href="/" class="navbar-link">Home</a>
+        </li>
+
+        <!-- If user is not logged in -->
+        <% if (!currentUser) { %>
+          <li class="navbar-item">
+            <a href="/login" class="navbar-link">Login</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/register" class="navbar-link">Register</a>
+          </li>
+        <% } %>
+
+        <!-- If user is logged in -->
+        <% if (currentUser) { %>
+          <li class="navbar-item">
+            <a href="/blogs" class="navbar-link">Blogs</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/post" class="navbar-link">Post</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/logout" class="navbar-link">Logout</a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>Update Blog Post</h1>
+      <form method="post">
+        <!-- Hidden input field to hold blogId  -->
+        <input type="hidden" name="blogId" value="<%= blog._id %>">
+        <input type="text" name="title" placeholder="Title" value="<%= blog.title %>" required>
+        <textarea name="content" rows="8" placeholder="Content" required><%= blog.content %></textarea>
+        <input type="submit" value="Update Post">
+      </form>
+    </div>
+  </body>
+</html>

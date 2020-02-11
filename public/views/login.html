@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">Node.js Advanced Blog Website</a>
+      <ul class="navbar-items">
+        <li class="navbar-item">
+          <a href="/" class="navbar-link">Home</a>
+        </li>
+
+        <!-- If user is not logged in -->
+        <% if (!currentUser) { %>
+          <li class="navbar-item">
+            <a href="/login" class="navbar-link">Login</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/register" class="navbar-link">Register</a>
+          </li>
+        <% } %>
+
+        <!-- If user is logged in -->
+        <% if (currentUser) { %>
+          <li class="navbar-item">
+            <a href="/blogs" class="navbar-link">Blogs</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/post" class="navbar-link">Post</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/logout" class="navbar-link">Logout</a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>Login</h1>
+      <form method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <!-- Showing error message if one is passed in -->
+        <% if (error) { %>
+            <strong><%= error %></strong>
+        <% } %>
+
+        <input type="submit" value="Login">
+      </form>
+    </div>
+  </body>
+</html>

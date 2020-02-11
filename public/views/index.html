@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Index</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">Node.js Advanced Blog Website</a>
+      <ul class="navbar-items">
+        <li class="navbar-item">
+          <a href="/" class="navbar-link">Home</a>
+        </li>
+
+        <!-- If user is not logged in -->
+        <% if (!currentUser) { %>
+          <li class="navbar-item">
+            <a href="/login" class="navbar-link">Login</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/register" class="navbar-link">Register</a>
+          </li>
+        <% } %>
+
+        <!-- If user is logged in -->
+        <% if (currentUser) { %>
+          <li class="navbar-item">
+            <a href="/blogs" class="navbar-link">Blogs</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/post" class="navbar-link">Post</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/logout" class="navbar-link">Logout</a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <% if (currentUser) { %>
+          <!-- We grab "[0]" because the currentUser cookie returns an array with the user object inside, so we grab it from EJS in case currentUser exists -->
+          <h1>Welcome <%= currentUser[0].name %>!</h1>
+          <h3>Username: <a href="/user/<%= currentUser[0]._id %>"><%= currentUser[0].username %></a></h3>
+          <h3>Email: <%= currentUser[0].email %></h3>
+      <% } %>
+
+      <% if (!currentUser) { %>
+          <h1>Welcome! Please <a href="/login">login</a> or <a href="/register">register</a>!</h1>
+      <% } %>
+    </div>
+  </body>
+</html>

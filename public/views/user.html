@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Blogs</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">Node.js Advanced Blog Website</a>
+      <ul class="navbar-items">
+        <li class="navbar-item">
+          <a href="/" class="navbar-link">Home</a>
+        </li>
+
+        <!-- If user is not logged in -->
+        <% if (!currentUser) { %>
+          <li class="navbar-item">
+            <a href="/login" class="navbar-link">Login</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/register" class="navbar-link">Register</a>
+          </li>
+        <% } %>
+
+        <!-- If user is logged in -->
+        <% if (currentUser) { %>
+          <li class="navbar-item">
+            <a href="/blogs" class="navbar-link">Blogs</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/post" class="navbar-link">Post</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/logout" class="navbar-link">Logout</a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <div class="user-grid">
+        <div>
+          <h1><%= user.name %> User Information</h1>
+          <h3>Username: <%= user.username %></h3>
+          <h3>Email: <%= user.email %></h3>
+        </div>
+
+        <div>
+          <h1><%= user.username %>'s Blog Posts</h1>
+          <div class="blogs">
+            <% for (blog of blogs) { %>
+                <div class="blog">
+                  <h3><a href="/blog/<%= blog._id %>"><%= blog.title %></a></h3>
+                  <p>
+                    <%= blog.content %>
+                  </p>
+                  <% if (currentUser[0]._id == user._id) { %>
+                    <a class="update" href="/update/<%= blog._id %>">Update</a>
+                    <button class="x" onclick="deleteBlog('<%= blog._id %>', '<%= user._id %>')">&times;</button>
+                  <% } %>
+                </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function deleteBlog(blogId, userId) {
+      fetch(`/api/delete-blog/?blogId=${blogId}&userId=${userId}`, {
+        method: "delete"
+      });
+      window.location.reload();
+    }
+  </script>
+</html>
