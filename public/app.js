@@ -414,6 +414,6 @@ app.delete("/api/delete-blog", (req, res) => {
 })
 
 
-app.listen(5000, () => {
-  console.log("[+] Node.js server running on port 5000...");
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`[+] Node.js server start on port ${process.env.PORT || 5000}`)
 });
