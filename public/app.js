@@ -32,8 +32,6 @@ app.use((req, res, next) => {
     "currentUser": req.cookies.currentUser,
   };
 
-  console.log("Mongo URL: " + mongoUrl);
-
   // Checking if user is going to restricted page without logging in
   if (!req.cookies.currentUser && loginRestrictedPages.includes(req.originalUrl)) {
     res.redirect("/login");
