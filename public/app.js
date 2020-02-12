@@ -3,11 +3,15 @@ const cookieParser = require("cookie-parser");
 const passwordHash = require("password-hash");
 
 // MongoDB dependencies
-const MongoClient = require("mongodb").MongoClient;
+let MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 
 const app = express();
 const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
+MongoClient = new MongoClient(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 // Setting view rendering engine
 app.set('view engine', 'ejs');
@@ -61,10 +65,7 @@ app.route("/login")
     const password = loginPostData.password;
 
     // Validating that credentials are valid
-    MongoClient.connect(mongoUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }, (err, client) => {
+    MongoClient.connect((err, client) => {
       if (err) throw err;
 
       const db = client.db("nodejs-advanced-blog");
@@ -113,10 +114,7 @@ app.route("/register")
     const hashedPassword = passwordHash.generate(password);
 
     // Checking is username or email is taken
-    MongoClient.connect(mongoUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }, (err, client) => {
+    MongoClient.connect((err, client) => {
       if (err) {
         console.error(err);
         return;
@@ -135,7 +133,7 @@ app.route("/register")
             if (emails.length == 0) {
               // Username, email, and passwords are validated!
               // Registering new user in database
-              MongoClient.connect(mongoUrl, {
+              MongoClient.connect({
                 useNewUrlParser: true,
                 useUnifiedTopology: true
               }, (err, client) => {
@@ -182,7 +180,7 @@ app.get("/logout", (req, res) => {
 
 app.get("/blogs", (req, res) => {
   // Getting all blogs
-  MongoClient.connect(mongoUrl, {
+  MongoClient.connect({
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }, (err, client) => {
@@ -213,10 +211,7 @@ app.route("/post")
     blogPostData["user"] = req.cookies.currentUser[0];
 
     // Saving blog post into Mongo
-    MongoClient.connect(mongoUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }, (err, client) => {
+    MongoClient.connect((err, client) => {
       if (err) throw err;
 
       const db = client.db("nodejs-advanced-blog");
@@ -240,7 +235,7 @@ app.get("/user/:id", (req, res) => {
   // All _id queries in MongoDB must be of type ObjectId
   const userObjectId = ObjectId(userId);
 
-  MongoClient.connect(mongoUrl, {
+  MongoClient.connect({
     useNewUrlParser: true,
     useUnifiedTopology: true
   }, (err, client) => {
@@ -257,7 +252,7 @@ app.get("/user/:id", (req, res) => {
         const user = users[0];  // users is type array from query, so we grab the first user which should be the only one
 
         // Grab all blogs that the queried user has written
-        MongoClient.connect(mongoUrl, {
+        MongoClient.connect({
           useNewUrlParser: true,
           useUnifiedTopology: true
         }, (err, client) => {
@@ -292,7 +287,7 @@ app.get("/blog/:id", (req, res) => {
   // All _id queries in MongoDB must be of type ObjectId
   const blogObjectId = ObjectId(blogId);
 
-  MongoClient.connect(mongoUrl, {
+  MongoClient.connect({
     useNewUrlParser: true,
     useUnifiedTopology: true
   }, (err, client) => {
@@ -331,10 +326,7 @@ app.route("/update/:id")
     const blogObjectId = ObjectId(blogId);
 
     // Getting blog to be updated
-    MongoClient.connect(mongoUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }, (err, client) => {
+    MongoClient.connect((err, client) => {
       if (err) throw err;
 
       const db = client.db("nodejs-advanced-blog");
@@ -367,10 +359,7 @@ app.route("/update/:id")
     const currentUser = req.cookies.currentUser[0];
 
     // Updating respective blog post
-    MongoClient.connect(mongoUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }, (err, client) => {
+    MongoClient.connect((err, client) => {
       if (err) throw err;
 
       const db = client.db("nodejs-advanced-blog");
@@ -402,7 +391,7 @@ app.delete("/api/delete-blog", (req, res) => {
   const blogId = req.query.blogId;
   const userId = req.query.userId;
 
-  MongoClient.connect(mongoUrl, {
+  MongoClient.connect({
     useNewUrlParser: true,
     useUnifiedTopology: true
   }, (err, client) => {
