@@ -23,7 +23,7 @@ app.use(express.urlencoded()); // HTML forms
 app.use(express.json()); // API clients
 
 // Global variables
-const loginRestrictedPages = ["/blogs", "/post"];  // List of pages that require login before proceeding
+const loginRestrictedPages = ["blogs", "post", "user", "blog", "update"];  // List of pages that require login before proceeding
 
 // Sending cookie data into each page
 app.use((req, res, next) => {
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
   };
 
   // Checking if user is going to restricted page without logging in
-  if (!req.cookies.currentUser && loginRestrictedPages.includes(req.originalUrl)) {
+  if (!req.cookies.currentUser && loginRestrictedPages.includes(req.originalUrl.split("/")[1])) {
     res.redirect("/login");
   }
   else {
