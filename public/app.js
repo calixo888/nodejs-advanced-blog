@@ -7,7 +7,9 @@ const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 
 const app = express();
-const mongoUrl = "mongodb://localhost:27017"
+const mongoUrl = process.env.MONGODB_URI;
+
+console.log(mongoUrl);
 
 // Setting view rendering engine
 app.set('view engine', 'ejs');
