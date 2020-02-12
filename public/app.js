@@ -7,9 +7,7 @@ const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 
 const app = express();
-const mongoUrl = process.env.MONGODB_URI;
-
-console.log(mongoUrl);
+const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
 
 // Setting view rendering engine
 app.set('view engine', 'ejs');
@@ -33,6 +31,8 @@ app.use((req, res, next) => {
   res.locals = {
     "currentUser": req.cookies.currentUser,
   };
+
+  console.log("Mongo URL: " + mongoUrl);
 
   // Checking if user is going to restricted page without logging in
   if (!req.cookies.currentUser && loginRestrictedPages.includes(req.originalUrl)) {
